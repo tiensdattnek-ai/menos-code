@@ -1,4 +1,6 @@
-require('dotenv').config();
+let dotenvLoaded = false;
+try { require('dotenv').config(); dotenvLoaded = true; } catch {}
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');
