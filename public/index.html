@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menos Code — AI Coding Assistant</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚡</text></svg>">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/style.css">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+</head>
+<body>
+  <div class="app" id="app">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <div class="logo-icon">⚡</div>
+          <span class="logo-text">Menos Code</span>
+        </div>
+        <button class="btn-icon" id="newChatBtn" title="New Chat (Ctrl+N)">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        </button>
+      </div>
+      <div class="sidebar-search">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        <input type="text" placeholder="Search conversations..." id="searchInput">
+      </div>
+      <div class="sidebar-conversations" id="conversationList"></div>
+      <div class="sidebar-footer">
+        <div class="footer-left">
+          <div class="model-badge"><span class="model-dot"></span><span>Menos Engine</span></div>
+          <div class="key-rotator"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4"/></svg><span id="keyStatus">10 Keys</span></div>
+        </div>
+        <button class="btn-icon" id="settingsBtn" title="Settings">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></button>
+      </div>
+    </aside>
+
+    <!-- Main -->
+    <main class="main">
+      <!-- Welcome -->
+      <div class="welcome" id="welcomeScreen">
+        <div class="welcome-content">
+          <div class="welcome-logo">⚡</div>
+          <h1>Menos Code</h1>
+          <p class="welcome-subtitle">100% Free • <strong>No Rate Limits</strong> • Always Ready</p>
+
+          <div class="variant-selector" id="variantSelector">
+            <button class="variant-btn active" data-variant="default">
+              <span class="variant-icon">⚡</span>
+              <span class="variant-name">Default</span>
+              <span class="variant-desc">Balanced power</span>
+            </button>
+            <button class="variant-btn" data-variant="instant">
+              <span class="variant-icon">⚡</span>
+              <span class="variant-name">Instant</span>
+              <span class="variant-desc">Fast & sharp</span>
+            </button>
+            <button class="variant-btn" data-variant="thinking">
+              <span class="variant-icon">🧠</span>
+              <span class="variant-name">Thinking</span>
+              <span class="variant-desc">Deep intelligence</span>
+            </button>
+          </div>
+
+          <div class="welcome-chips">
+            <button class="chip" data-prompt="Build a complete REST API with Express.js, MongoDB, JWT auth, and error handling">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+              <span>Build a REST API</span>
+            </button>
+            <button class="chip" data-prompt="Explain closures, event loop, and async/await in JavaScript with deep examples">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+              <span>Explain JS concepts</span>
+            </button>
+            <button class="chip" data-prompt="Create a full landing page with HTML, CSS, and JavaScript — modern, responsive, dark theme">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>
+              <span>Full landing page</span>
+            </button>
+            <button class="chip" data-prompt="Create a React + TypeScript component library with Tailwind CSS">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+              <span>React component</span>
+            </button>
+            <button class="chip" data-prompt="Help me debug this code — find the root cause, explain it, and provide the fix">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+              <span>Debug code</span>
+            </button>
+            <button class="chip" data-prompt="Design a scalable microservices architecture for an e-commerce platform">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="8" rx="2" ry="2"/><rect x="2" y="14" width="20" height="8" rx="2" ry="2"/><line x1="6" y1="6" x2="6.01" y2="6"/><line x1="6" y1="18" x2="6.01" y2="18"/></svg>
+              <span>System architecture</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat -->
+      <div class="chat-container" id="chatContainer">
+        <div class="messages" id="messages"></div>
+      </div>
+
+      <!-- Input -->
+      <div class="input-area">
+        <div class="input-wrapper">
+          <div class="input-variant-bar">
+            <button class="input-variant-btn active" data-variant="default" title="Default">⚡ Default</button>
+            <button class="input-variant-btn" data-variant="instant" title="Instant">⚡ Instant</button>
+            <button class="input-variant-btn" data-variant="thinking" title="Thinking">🧠 Thinking</button>
+          </div>
+          <div class="input-main">
+            <textarea id="userInput" placeholder="Ask Menos Code anything..." rows="1" autofocus></textarea>
+            <div class="input-actions">
+              <span class="char-count" id="charCount"></span>
+              <button class="send-btn" id="sendBtn" disabled title="Send (Enter)">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+              </button>
+              <button class="stop-btn hidden" id="stopBtn" title="Stop">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="16" rx="2"/></svg>
+              </button>
+            </div>
+          </div>
+          <div class="input-bottom">
+            <div class="input-hints">
+              <span><kbd>Enter</kbd> send</span>
+              <span><kbd>Shift+Enter</kbd> newline</span>
+            </div>
+            <div class="model-indicator"><span class="pulse-dot"></span><span>Menos Engine</span></div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Settings -->
+    <div class="settings-panel hidden" id="settingsPanel">
+      <div class="settings-header">
+        <h2>Settings</h2>
+        <button class="btn-icon" id="closeSettingsBtn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        </button>
+      </div>
+      <div class="settings-body">
+        <div class="setting-group">
+          <label>Temperature</label>
+          <div class="setting-control">
+            <input type="range" id="tempSlider" min="0" max="1" step="0.05" value="0.7">
+            <span id="tempValue">0.70</span>
+          </div>
+          <p class="setting-desc">Lower = more focused, Higher = more creative</p>
+        </div>
+        <div class="setting-group">
+          <label>Max Tokens</label>
+          <div class="setting-control">
+            <input type="range" id="maxTokensSlider" min="256" max="16384" step="256" value="4096">
+            <span id="maxTokensValue">4096</span>
+          </div>
+          <p class="setting-desc">Maximum response length</p>
+        </div>
+        <div class="setting-group">
+          <label>🔄 Key Rotation</label>
+          <div class="keys-grid" id="keysGrid"></div>
+          <p class="setting-desc">Keys rotate automatically — no rate limits</p>
+        </div>
+        <div class="setting-group">
+          <label>System Info</label>
+          <div class="system-info">
+            <div class="info-row"><span>Status</span><span style="color:var(--success)">● Online</span></div>
+            <div class="info-row"><span>Engine</span><span>Menos v4.0</span></div>
+            <div class="info-row"><span>Keys Active</span><span id="infoKeys">10</span></div>
+            <div class="info-row"><span>Variants</span><span>Default · Instant · Thinking</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Preview -->
+    <div class="preview-panel hidden" id="previewPanel">
+      <div class="preview-header">
+        <div class="preview-tabs">
+          <button class="preview-tab active" data-tab="preview">Preview</button>
+          <button class="preview-tab" data-tab="source">Source</button>
+        </div>
+        <div class="preview-actions">
+          <button class="btn-icon" id="previewNewTab" title="New tab">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+          </button>
+          <button class="btn-icon" id="closePreviewBtn" title="Close">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+      <div class="preview-body">
+        <iframe id="previewFrame" sandbox="allow-scripts allow-modals" title="Preview"></iframe>
+        <pre class="preview-source hidden" id="previewSource"><code></code></pre>
+      </div>
+    </div>
+
+    <button class="sidebar-toggle" id="sidebarToggle">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    </button>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>

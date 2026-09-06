@@ -1,0 +1,18 @@
+{
+  "name": "menos-code",
+  "version": "1.0.0",
+  "description": "Menos Code - Premium AI Coding Assistant powered by Laguna S 2.1",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "keywords": ["ai", "coding", "assistant", "copilot", "laguna"],
+  "author": "Menos Code",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "dotenv": "^16.3.1",
+    "marked": "^11.1.1"
+  }
+}
